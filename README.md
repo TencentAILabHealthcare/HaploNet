@@ -41,7 +41,6 @@ Unlike existing pipelines that rely on post-hoc statistical aggregation of read-
   - [Mode B — 3-Class Classification](#mode-b--3-class-classification)
 - [Disclaimer](#disclaimer)
 - [Copyright](#copyright)
-- [Citation](#citation)
 
 ---
 
@@ -575,15 +574,3 @@ This tool is developed by Tencent AI for Life Sciences Lab.
 
 The copyright holder for this project is AI for Life Sciences Lab, Tencent.
 All rights reserved.
-
-# Citation
-If you use HaploNet in your research, please cite:
-
-```bibtex
-@article{zhou2026haplonet,
-  title={HaploNet enables allele-specific DNA methylation detection using Oxford Nanopore sequencing data},
-  author={Zhou, Jiale and Wu, Jiayang and Qin, Chenchen and Wang, Yifei and Tang, Zhenchao and Lv, Tianxv and Wu, Zhijian and Deng, Zhipeng and Lin, Xun and He, Bing and Zheng, Yefeng and Yao, Jianhua},
-  journal={xxx},
-  year={2026}
-}
-```
