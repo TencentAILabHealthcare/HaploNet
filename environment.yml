@@ -1,0 +1,16 @@
+name: haplonet
+channels:
+  - defaults
+  - conda-forge
+  - bioconda
+dependencies:
+  - python>=3.9,<3.12
+  - pip
+  - pysam>=0.22
+  - numpy
+  - tqdm
+  - intervaltree
+  - pip:
+      - torch>=2.0
+      - intervaltree
+      - whatshap==2.8

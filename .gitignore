@@ -1,0 +1,17 @@
+weight/*
+!weight/.gitkeep
+store/
+__pycache__/
+*.pyc
+*.pt
+*.bam
+*.bai
+*.gz
+*.tbi
+*.fna
+*.pkl.bin
+*.jsonl
+*.csv
+*.vcf
+*.txt
+*.log
