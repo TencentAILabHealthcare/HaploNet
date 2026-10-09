@@ -35,7 +35,6 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from haplonet.data.constants import Candidate, check_seq, parse_region
-from haplonet.data.bam_reader import make_sequencing_msa_transbp, _padding_msa
 from haplonet.data.builder import load_gt_candidates, build_complete_msa
 from haplonet.model.head import XNATokenizer
 from haplonet.inference.runner import run_pytorch_inference

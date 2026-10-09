@@ -2,6 +2,8 @@
 """Custom layer initializations."""
 
 import math
+
+import torch
 import torch.nn as nn
 
 
@@ -25,6 +27,8 @@ class _Linear(nn.Linear):
         self._init = init
         super().__init__(in_f, out_f, bias=bias, **kw)
     def reset_parameters(self):
+        if self._init and self.bias is not None:
+            nn.init.zeros_(self.bias)
         if self._init and isinstance(self._init, str):
             _INIT_FUNCS[self._init](self.weight, self.bias)
         elif callable(self._init):

@@ -1,6 +1,8 @@
 # Copyright (c) 2026, Tencent Inc. All rights reserved.
 """USM backbone and MethylationUSM classification model."""
 
+import math
+
 import torch
 import torch.nn as nn
 
@@ -85,8 +87,8 @@ class MethylationUSM(USMBase):
         if ins_ids is not None:
             ins_mask = None
             if self.padding_idx is not None:
-                ins_mask = ins_ids.eq(self.padding_idx)
-                if not ins_mask.any(): ins_mask = None
+                ins_mask = ins_ids.ne(self.padding_idx)
+                if ins_mask.all(): ins_mask = None
             emb = (emb + self.embed(ins_ids, mask=ins_mask)) * 0.5
         if strand_ids is not None:
             emb = emb + self.strand_embed(strand_ids, mask=mask)
@@ -109,20 +111,15 @@ class MethylationUSM(USMBase):
         if self.padding_idx is not None:
             pad_mask = msa_ids.eq(self.padding_idx)
             if not pad_mask.any(): pad_mask = None
-        msa_mask = None if pad_mask is not None else ~pad_mask
+        msa_mask = None if pad_mask is None else ~pad_mask
         emb = self._embed(msa_ids, ins_ids, strand_ids, mapping_qualities, base_qualities,
                          haplotypes, coverage_counts, mask=msa_mask)
         hidden, _, _ = self._transformer(emb, mask=msa_mask)
         hidden = masked_mean(msa_mask.unsqueeze(-1) if msa_mask is not None else None,
                            hidden.float(), dim=1).type_as(hidden)
         smask = (msa_mask[:,0] if msa_mask is not None else None) if target_mask is None else target_mask
-        if smask is not None and smask.dim() == 2:
-            smask_4d = smask.unsqueeze(1).unsqueeze(-1)
-        elif smask is not None:
-            smask_4d = smask
-        else:
-            smask_4d = None
-        pooled = masked_mean(smask_4d, hidden.float(), dim=2).type_as(hidden)
+        smask = smask.unsqueeze(-1) if smask is not None else None
+        pooled = masked_mean(smask, hidden.float(), dim=1).type_as(hidden)
         pooled = pooled.reshape(pooled.shape[0], -1)
         pooled = self.norm_final(pooled); logits = self.gt_cls(pooled)
         return {"gt_seq": logits}
